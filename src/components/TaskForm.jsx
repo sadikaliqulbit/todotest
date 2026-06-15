@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Input, Select } from "../common/FormFields";
+import { Button, Input, Select } from "./common/FormFields";
 import { useState } from "react";
 
 function TaskForm() {
@@ -83,7 +83,7 @@ function TaskForm() {
               <textarea
                 type="text"
                 id="description"
-                className="w-full h-[40%] border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-[4  0%] border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter task"
                 value={formData.description}
                 onChange={(e) =>

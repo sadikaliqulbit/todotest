@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TaskCard from "./TaskCard";
-import { Input } from "../common/FormFields";
+import { Input } from "./common/FormFields";
 
 const columns = [
   { key: "all", label: "All Tasks" },

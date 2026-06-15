@@ -1,6 +1,6 @@
 import React from "react";
 import { MdDelete } from "react-icons/md";
-import { Select } from "../common/FormFields";
+import { Select } from "./common/FormFields";
 
 const priorityColors = {
   High: "bg-red-500",

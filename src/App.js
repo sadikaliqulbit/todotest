@@ -1,24 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Statistics from "./components/Statistics";
+import TaskColumn from "./components/TaskColumn";
+import TaskForm from "./components/TaskForm";
+import TaskModal from "./components/TaskModal";
 
 function App() {
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = (task) => {
+    setTasks((prev) => [...prev, { ...task, id: Date.now() }]);
+  };
+
+  const updateTaskStatus = (id, status) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
+  };
+
+  const deleteTask = (id) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Statistics tasks={tasks} />
+      <TaskForm addTask={addTask} />
+      <TaskColumn
+        tasks={tasks}
+        updateTaskStatus={updateTaskStatus}
+        deleteTask={deleteTask}
+        onCardClick={setSelectedTask}
+      />
+      <TaskModal
+        task={selectedTask}
+        onClose={() => setSelectedTask(null)}
+        deleteTask={deleteTask}
+        updateTaskStatus={updateTaskStatus}
+      />
+    </>
   );
 }
 

@@ -9,9 +9,9 @@ const columns = [
   { key: "done", label: "Done" },
 ];
 
-function TaskColumn({ tasks, updateTaskStatus, deleteTask, onCardClick }) {
+function TaskColumn({ tasks, updateTaskStatus, deleteTask, onCardClick, onDeleteClick }) {
   const [search, setSearch] = useState("");
-
+  
   const filtered = tasks.filter((t) =>
     t.title.toLowerCase().includes(search.toLowerCase())
   );
@@ -54,6 +54,7 @@ function TaskColumn({ tasks, updateTaskStatus, deleteTask, onCardClick }) {
                   updateTaskStatus={updateTaskStatus}
                   deleteTask={deleteTask}
                   onCardClick={onCardClick}
+                  onDeleteClick={onDeleteClick}
                 />
               ))
             )}

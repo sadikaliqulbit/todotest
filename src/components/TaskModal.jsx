@@ -13,12 +13,11 @@ function TaskModal({ task, onClose, deleteTask, updateTaskStatus }) {
   const isDone = task.status === "done";
 
   const handleDelete = () => {
-    if (window.confirm(`Delete "${task.title}"?`)) {
+    if (window.confirm(`Are you sure you want to delete "${task.title}"?`)) {
       deleteTask(task.id);
       onClose();
     }
   };
-
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
@@ -29,7 +28,9 @@ function TaskModal({ task, onClose, deleteTask, updateTaskStatus }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex justify-between items-start mb-4">
-          <h2 className="text-xl font-bold text-gray-800 font-title">{task.title}</h2>
+          <h2 className="text-xl font-bold text-gray-800 font-title">
+            {task.title}
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-600 text-xl font-bold"
@@ -58,8 +59,10 @@ function TaskModal({ task, onClose, deleteTask, updateTaskStatus }) {
             <p className="text-sm text-gray-500 font-medium mb-1">Status</p>
             <Select
               value={task.status}
-              onChange={(e) => updateTaskStatus(task.id, e.target.value)}
+              onChange={(e) => { updateTaskStatus(task.id, e.target.value); onClose(); }}
               disabled={isDone}
+              onClick={(e) => e.stopPropagation()}
+              
             >
               <option value="todo">Todo</option>
               <option value="in-progress">In Progress</option>
@@ -70,7 +73,10 @@ function TaskModal({ task, onClose, deleteTask, updateTaskStatus }) {
 
         <button
           onClick={handleDelete}
-          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium w-full justify-center"
+          disabled={isDone}
+          className={`flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium w-full justify-center
+            ${isDone ? "opacity-50 cursor-not-allowed" : ""}
+            `}
         >
           <MdDelete size={18} /> Delete Task
         </button>

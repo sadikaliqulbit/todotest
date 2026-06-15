@@ -3,6 +3,7 @@ import Statistics from "./components/Statistics";
 import TaskColumn from "./components/TaskColumn";
 import TaskForm from "./components/TaskForm";
 import TaskModal from "./components/TaskModal";
+import DeleteTaskModel from "./components/DeleteTaskModel";
 
 function App() {
   const [tasks, setTasks] = useState(() => {
@@ -10,6 +11,7 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [selectedTask, setSelectedTask] = useState(null);
+  const [taskToDelete, setTaskToDelete] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -36,10 +38,17 @@ function App() {
         updateTaskStatus={updateTaskStatus}
         deleteTask={deleteTask}
         onCardClick={setSelectedTask}
+        onDeleteClick={setTaskToDelete}
       />
       <TaskModal
         task={selectedTask}
         onClose={() => setSelectedTask(null)}
+        deleteTask={deleteTask}
+        updateTaskStatus={updateTaskStatus}
+      />
+      <DeleteTaskModel
+        task={taskToDelete}
+        onClose={() => setTaskToDelete(null)}
         deleteTask={deleteTask}
         updateTaskStatus={updateTaskStatus}
       />

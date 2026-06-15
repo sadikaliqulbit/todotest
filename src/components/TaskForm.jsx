@@ -2,10 +2,10 @@ import React from "react";
 import { Button, Input, Select } from "./common/FormFields";
 import { useState } from "react";
 
-function TaskForm() {
+function TaskForm({ addTask }) {
   const [formData, setFormData] = useState({
     title: "",
-    description:"",
+    description: "",
     priority: "",
     status: "",
   });
@@ -13,11 +13,15 @@ function TaskForm() {
   const [errors, setErrors] = useState({});
 
   const validate = () => {
+    const localdata = JSON.parse(localStorage.getItem("tasks") || "[]");
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = "Title is required";
     else if (formData.title.trim().length < 3)
       newErrors.title = "Title must be at least 3 characters";
-    if (!formData.description.trim()) newErrors.description = "Description is required";
+    else if (localdata.some((task) => task.title === formData.title.trim()))
+      newErrors.title = "Title already exists";
+    if (!formData.description.trim())
+      newErrors.description = "Description is required";
     if (!formData.priority) newErrors.priority = "Priority is required";
     if (!formData.status) newErrors.status = "Status is required";
     return newErrors;
@@ -33,13 +37,9 @@ function TaskForm() {
     }
     setErrors({});
 
-    const existing = JSON.parse(localStorage.getItem("tasks") || "[]");
+    addTask(formData);
 
-    const newTask = { ...formData, id: Date.now() };
-
-    localStorage.setItem("tasks", JSON.stringify([...existing, newTask]));
-
-    setFormData({ title: "",description:"", priority: "", status: "" });
+    setFormData({ title: "", description: "", priority: "", status: "" });
     setErrors({});
   };
 
@@ -83,7 +83,7 @@ function TaskForm() {
               <textarea
                 type="text"
                 id="description"
-                className="w-full h-[4  0%] border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full h-[40%] border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Enter task"
                 value={formData.description}
                 onChange={(e) =>
@@ -91,7 +91,9 @@ function TaskForm() {
                 }
               />
               {errors.description && (
-                <p className="text-red-500 text-sm mt-1">{errors.description}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.description}
+                </p>
               )}
             </div>
             <div className="mb-4">
@@ -142,7 +144,7 @@ function TaskForm() {
                 <p className="text-red-500 text-sm mt-1">{errors.status}</p>
               )}
             </div>
-            <div className="mt-6">
+            <div className="mt-8">
               <Button>Add Task</Button>
             </div>
           </form>
